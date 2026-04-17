@@ -167,7 +167,7 @@ function GlobalLaunchPanel() {
     // Latvia (HQ) stays centre-left Europe; New York replaces old US slot (far left)
     const positioned: PositionedRegion[] = [
       // Latvia HQ — slightly left of centre, upper area
-      { ...REGIONS[0], x: W * 0.485, y: H * 0.36, baseR: 11 },
+      { ...REGIONS[0], x: W * 0.485, y: H * 0.38, baseR: 11 },
       // Baltics — near Latvia
       { ...REGIONS[1], x: W * 0.51,  y: H * 0.28, baseR: 7  },
       // Germany — slightly left and below
@@ -756,7 +756,7 @@ export default function Home() {
             Launching in
           </p>
           <div style={{ display:'flex', alignItems:'flex-start', gap:'clamp(6px,1.5vw,14px)', flexWrap:'wrap', justifyContent:'center' }}>
-            <CdUnit value={pad(time.d, 3)} label="Days"  />
+            <CdUnit value={pad(time.d)} label="Days"  />
             <span className="blink" style={{ fontSize:'clamp(26px,5vw,56px)', fontWeight:900, color:'#8B5CF6', paddingTop:'clamp(10px,1.8vw,18px)', lineHeight:1 }}>:</span>
             <CdUnit value={pad(time.h)} label="Hours" />
             <span className="blink" style={{ fontSize:'clamp(26px,5vw,56px)', fontWeight:900, color:'#8B5CF6', paddingTop:'clamp(10px,1.8vw,18px)', lineHeight:1 }}>:</span>
