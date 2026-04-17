@@ -116,8 +116,8 @@ interface RegionDot {
 
 // CHANGES: removed 'United States' entry; Latvia no longer has "— HQ" in its name label
 const REGIONS: RegionDot[] = [
-  { name: 'Latvia',        primary: true,  rgb: [124, 58, 237], size: 1.6, pulses: 4 },
-  { name: 'Baltics',       primary: false, rgb: [124, 58, 237], size: 1.0, pulses: 2 },
+  { name: 'Baltics',        primary: true,  rgb: [124, 58, 237], size: 1.6, pulses: 4 },
+  { name: 'Latvia',       primary: false, rgb: [124, 58, 237], size: 1.0, pulses: 2 },
   { name: 'Germany',       primary: false, rgb: [124, 58, 237], size: 1.0, pulses: 2 },
   { name: 'Sweden',        primary: false, rgb: [124, 58, 237], size: 0.9, pulses: 1 },
   { name: 'United Kingdom',primary: false, rgb: [245, 158,  11], size: 1.0, pulses: 2 },
