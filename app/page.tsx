@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import { useState, useEffect, useRef, useCallback } from 'react'
 
 // ─── TYPES ────────────────────────────────────────────────────────────────────
@@ -167,7 +168,7 @@ function GlobalLaunchPanel() {
     // Latvia (HQ) stays centre-left Europe; New York replaces old US slot (far left)
     const positioned: PositionedRegion[] = [
       // Latvia HQ — slightly left of centre, upper area
-      { ...REGIONS[0], x: W * 0.485, y: H * 0.38, baseR: 11 },
+      { ...REGIONS[0], x: W * 0.485, y: H * 0.41, baseR: 11 },
       // Baltics — near Latvia
       { ...REGIONS[1], x: W * 0.51,  y: H * 0.28, baseR: 7  },
       // Germany — slightly left and below
@@ -670,11 +671,7 @@ export default function Home() {
 
             {/* Main headline */}
             <div style={{ flex:'1 1 340px', textAlign:'center' }}>
-              <div style={{ display:'inline-block', padding:'8px 20px', borderRadius:999, marginBottom:16, background:'rgba(124,58,237,0.07)', border:'1px solid rgba(124,58,237,0.14)' }}>
-                <span style={{ fontSize:'clamp(8px,1.4vw,11px)', color:'#7C3AED', fontWeight:600, letterSpacing:'0.28em', textTransform:'uppercase' }}>
-                  A Nexfluence Product
-                </span>
-              </div>
+
               <h1 style={{ fontSize:'clamp(22px,4.5vw,54px)', fontWeight:900, lineHeight:1.12, letterSpacing:'-0.02em', color:'#111', margin:'0 auto 12px', maxWidth:740 }}>
                 Influencer marketing is{' '}
                 <span style={{ background:'linear-gradient(90deg,#7C3AED,#EC4899)', WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent', backgroundClip:'text' }}>
@@ -692,9 +689,7 @@ export default function Home() {
             <div style={{ display:'flex', flexDirection:'column', alignItems:'center', gap:12, flexShrink:0 }}>
               {/* "Scan me" label above */}
               <div style={{ display:'flex', alignItems:'center', gap:6 }}>
-                <span style={{ fontSize:'clamp(7px,1.1vw,9px)', fontWeight:700, letterSpacing:'0.32em', textTransform:'uppercase', color:'#9CA3AF' }}>
-                  ↓ Scan the code
-                </span>
+
               </div>
 
               {/* QR card */}
@@ -730,20 +725,14 @@ export default function Home() {
 
                 {/* Nexus logo mark inside bottom of card */}
                 <div style={{ display:'flex', alignItems:'center', gap:6 }}>
-                  <div style={{ width:18, height:18, borderRadius:6, background:'linear-gradient(135deg,#7C3AED,#EC4899)', display:'flex', alignItems:'center', justifyContent:'center', color:'white', fontSize:9, fontWeight:900, flexShrink:0 }}>✦</div>
-                  <span style={{ fontSize:'clamp(8px,1.2vw,10px)', fontWeight:700, letterSpacing:'0.16em', color:'#7C3AED' }}>NEXUS</span>
+                  <img src="/Nex.png" className='h-12'></img>
+                  <span style={{ fontSize:'clamp(12px,1.2vw,10px)', fontWeight:700, letterSpacing:'0.16em', color:'#7C3AED' }}>Nexus</span>
                 </div>
               </div>
 
               {/* "Join now" label below */}
               <div style={{ textAlign:'center' }}>
-                <span style={{ fontSize:'clamp(9px,1.3vw,11px)', fontWeight:600, color:'#7C3AED', letterSpacing:'0.06em' }}>
-                  Join now →
-                </span>
-                <br />
-                <span style={{ fontSize:'clamp(7px,1.1vw,9px)', fontWeight:400, color:'#9CA3AF' }}>
-                  nexfluence.com/nexus
-                </span>
+              
               </div>
             </div>
 
@@ -767,7 +756,7 @@ export default function Home() {
           <div style={{ marginTop:20, padding:'8px 20px', borderRadius:999, display:'flex', alignItems:'center', gap:8, background:'rgba(124,58,237,0.07)', border:'1px solid rgba(124,58,237,0.14)' }}>
             <span className="dot-pulse" style={{ display:'inline-block', width:8, height:8, borderRadius:'50%', background:'#7C3AED', flexShrink:0 }} />
             <span style={{ fontSize:'clamp(8px,1.4vw,11px)', fontWeight:600, letterSpacing:'0.22em', textTransform:'uppercase', color:'#6D28D9' }}>
-              May 4, 2026 · 9:00 AM
+              May 4, 2026
             </span>
           </div>
         </section>
@@ -985,8 +974,7 @@ export default function Home() {
         {/* FOOTER */}
         <footer style={{ padding:'clamp(20px,3vw,32px) clamp(16px,4vw,48px)', display:'flex', flexDirection:'row', flexWrap:'wrap', alignItems:'center', justifyContent:'space-between', gap:12, borderTop:'1px solid rgba(124,58,237,0.09)', background:'rgba(255,255,255,0.55)' }}>
           <div style={{ display:'flex', alignItems:'center', gap:10, fontWeight:900, letterSpacing:'0.08em', color:'#1F2937', fontSize:'clamp(13px,2vw,16px)' }}>
-            <div style={{ width:30, height:30, borderRadius:10, background:'linear-gradient(135deg,#7C3AED,#EC4899)', display:'flex', alignItems:'center', justifyContent:'center', color:'white', fontSize:14, fontWeight:900, flexShrink:0 }}>✦</div>
-            NEXUS
+<img src="/Nex.png" className='h-16' alt="" />            Nexus
             <span style={{ fontWeight:400, color:'#9CA3AF', fontSize:'clamp(11px,1.5vw,13px)' }}>by Nexfluence</span>
           </div>
           <p style={{ fontSize:'clamp(10px,1.4vw,12px)', fontWeight:300, color:'#9CA3AF' }}>
