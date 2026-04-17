@@ -46,26 +46,6 @@ interface ConfDataRef {
   running: boolean
 }
 
-interface CityDot {
-  x: number
-  y: number
-}
-
-interface City {
-  name:    string
-  lat:     number
-  lon:     number
-  r:       number
-  pulses:  number
-  rgb:     [number, number, number]
-  primary: boolean
-}
-
-interface MappedCity extends City {
-  x: number
-  y: number
-}
-
 interface OrbConfig {
   w:       number
   h:       number
@@ -126,14 +106,23 @@ const MESSAGES: Record<Category, ModalMessage> = {
 
 // ─── STATIC DATA ─────────────────────────────────────────────────────────────
 
-const CITIES: City[] = [
-  { name: 'Baltics',       lat: 57.0, lon:   24.0, r: 9, pulses: 4, rgb: [124, 58, 237], primary: true  },
-  { name: 'New York',      lat: 40.7, lon:  -74.0, r: 5, pulses: 2, rgb: [236, 72, 153], primary: false },
-  { name: 'United States', lat: 39.0, lon: -100.0, r: 5, pulses: 1, rgb: [236, 72, 153], primary: false },
-  { name: 'London',        lat: 51.5, lon:   -0.1, r: 5, pulses: 2, rgb: [245, 158,  11], primary: false },
-  { name: 'Germany',       lat: 51.2, lon:   10.5, r: 5, pulses: 2, rgb: [124, 58, 237], primary: false },
-  { name: 'Sweden',        lat: 62.5, lon:   16.5, r: 5, pulses: 1, rgb: [124, 58, 237], primary: false },
-  { name: 'Mumbai',        lat: 19.0, lon:   72.8, r: 5, pulses: 2, rgb: [236, 72, 153], primary: false },
+interface RegionDot {
+  name:    string
+  primary: boolean
+  rgb:     [number, number, number]
+  size:    number
+  pulses:  number
+}
+
+// CHANGES: removed 'United States' entry; Latvia no longer has "— HQ" in its name label
+const REGIONS: RegionDot[] = [
+  { name: 'Latvia',        primary: true,  rgb: [124, 58, 237], size: 1.6, pulses: 4 },
+  { name: 'Baltics',       primary: false, rgb: [124, 58, 237], size: 1.0, pulses: 2 },
+  { name: 'Germany',       primary: false, rgb: [124, 58, 237], size: 1.0, pulses: 2 },
+  { name: 'Sweden',        primary: false, rgb: [124, 58, 237], size: 0.9, pulses: 1 },
+  { name: 'United Kingdom',primary: false, rgb: [245, 158,  11], size: 1.0, pulses: 2 },
+  { name: 'New York',      primary: false, rgb: [236, 72, 153], size: 1.0, pulses: 2 },
+  { name: 'India — Mumbai',primary: false, rgb: [236, 72, 153], size: 1.0, pulses: 2 },
 ]
 
 const CATEGORY_ITEMS: CategoryItem[] = [
@@ -149,48 +138,13 @@ const ORBS: OrbConfig[] = [
 ]
 
 const LEGEND_ITEMS: LegendItem[] = [
-  { color: '#7C3AED', shadow: '0 0 6px rgba(124,58,237,0.8)', label: 'Headquarters', size: 10 },
-  { color: '#EC4899', shadow: 'none',                         label: 'Active Markets', size: 8  },
+  { color: '#7C3AED', shadow: '0 0 6px rgba(124,58,237,0.8)', label: 'Headquarters — Riga, Latvia', size: 10 },
+  { color: '#EC4899', shadow: 'none',                         label: 'Active Launch Markets',        size: 8  },
 ]
 
-// ─── GEO HELPERS ─────────────────────────────────────────────────────────────
+// ─── GLOBAL LAUNCH PANEL ─────────────────────────────────────────────────────
 
-function latLonToXY(lat: number, lon: number, W: number, H: number): { x: number; y: number } {
-  return { x: ((lon + 180) / 360) * W, y: ((90 - lat) / 180) * H }
-}
-
-function isLand(lat: number, lon: number): boolean {
-  if (lat < -58) return true
-  if (lon >= -58 && lon <= -17  && lat >= 60 && lat <= 84) return true
-  if (lon >= -24 && lon <= -13  && lat >= 63 && lat <= 67) return true
-  if (lat >= 5   && lat <= 73   && lon >= -168 && lon <= -52) {
-    if (lon >= -95 && lon <= -75 && lat >= 51 && lat <= 65) return false
-    if (lon >= -97 && lon <= -80 && lat >= 18 && lat <= 30) return false
-    if (lon >= -85 && lon <= -60 && lat >=  8 && lat <= 24) return false
-    return true
-  }
-  if (lat >= -55 && lat <= 12  && lon >= -82  && lon <= -33) return true
-  if (lat >=  50 && lat <= 62  && lon >= -11  && lon <=   2) return true
-  if (lat >= 36  && lat <= 72  && lon >= -10  && lon <=  40) {
-    if (lat >= 30 && lat <= 40 && lon >= -2 && lon <= 30) return false
-    return true
-  }
-  if (lat >= 55  && lat <= 72  && lon >=   5 && lon <=  32) return true
-  if (lat >= -35 && lat <= 38  && lon >= -18 && lon <=  52) return true
-  if (lat >= 12  && lat <= 42  && lon >=  35 && lon <=  62) return true
-  if (lat >=  5  && lat <= 37  && lon >=  60 && lon <=  92) return true
-  if (lat >= -10 && lat <= 25  && lon >=  92 && lon <= 142) return true
-  if (lat >= 20  && lat <= 54  && lon >= 100 && lon <= 145) return true
-  if (lat >= 50  && lat <= 75  && lon >=  35 && lon <= 180) return true
-  if (lat >= 30  && lat <= 46  && lon >= 130 && lon <= 146) return true
-  if (lat >= -39 && lat <= -10 && lon >= 112 && lon <= 155) return true
-  if (lat >= -47 && lat <= -34 && lon >= 165 && lon <= 179) return true
-  return false
-}
-
-// ─── WORLD MAP CANVAS ────────────────────────────────────────────────────────
-
-function WorldMapCanvas() {
+function GlobalLaunchPanel() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const rafRef    = useRef<number | null>(null)
 
@@ -199,96 +153,128 @@ function WorldMapCanvas() {
     if (!canvas) return
     const ctx = canvas.getContext('2d')
     if (!ctx) return
+
     const W = canvas.width
     const H = canvas.height
 
-    const COLS = 130, ROWS = 62
-    const dots: CityDot[] = []
-    for (let row = 0; row < ROWS; row++) {
-      for (let col = 0; col < COLS; col++) {
-        const lat = 90   - (row + 0.5) * (180 / ROWS)
-        const lon = -180 + (col + 0.5) * (360 / COLS)
-        if (isLand(lat, lon)) {
-          dots.push({ x: (col + 0.5) * (W / COLS), y: (row + 0.5) * (H / ROWS) })
-        }
-      }
+    interface PositionedRegion extends RegionDot {
+      x: number
+      y: number
+      baseR: number
     }
 
-    const mapped: MappedCity[] = CITIES.map(city => ({
-      ...city,
-      ...latLonToXY(city.lat, city.lon, W, H),
-    }))
-    const hub = mapped.find(c => c.primary) ?? null
+    // CHANGES: removed United States position; adjusted remaining positions for balance
+    // Latvia (HQ) stays centre-left Europe; New York replaces old US slot (far left)
+    const positioned: PositionedRegion[] = [
+      // Latvia HQ — slightly left of centre, upper area
+      { ...REGIONS[0], x: W * 0.485, y: H * 0.36, baseR: 11 },
+      // Baltics — near Latvia
+      { ...REGIONS[1], x: W * 0.51,  y: H * 0.28, baseR: 7  },
+      // Germany — slightly left and below
+      { ...REGIONS[2], x: W * 0.445, y: H * 0.44, baseR: 7  },
+      // Sweden — above Latvia
+      { ...REGIONS[3], x: W * 0.47,  y: H * 0.20, baseR: 6  },
+      // United Kingdom — left of Europe cluster
+      { ...REGIONS[4], x: W * 0.385, y: H * 0.38, baseR: 7  },
+      // New York — far left (was previously the second US dot)
+      { ...REGIONS[5], x: W * 0.16,  y: H * 0.34, baseR: 7  },
+      // India — right side
+      { ...REGIONS[6], x: W * 0.72,  y: H * 0.52, baseR: 7  },
+    ]
+
+    const hub = positioned[0]
     let tick = 0
 
     function draw(): void {
       ctx!.clearRect(0, 0, W, H)
 
-      ctx!.fillStyle = 'rgba(124,58,237,0.18)'
-      for (const d of dots) {
+      // Subtle grid of dots as background texture
+      ctx!.fillStyle = 'rgba(124,58,237,0.10)'
+      const cols = 48, rows = 22
+      for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+          const dx = (c + 0.5) * (W / cols)
+          const dy = (r + 0.5) * (H / rows)
+          ctx!.beginPath()
+          ctx!.arc(dx, dy, 1.6, 0, Math.PI * 2)
+          ctx!.fill()
+        }
+      }
+
+      // Draw animated dashed lines from hub to each region
+      for (const region of positioned.slice(1)) {
+        const grad = ctx!.createLinearGradient(hub.x, hub.y, region.x, region.y)
+        grad.addColorStop(0, 'rgba(124,58,237,0.55)')
+        grad.addColorStop(1, `rgba(${region.rgb[0]},${region.rgb[1]},${region.rgb[2]},0.25)`)
+        ctx!.save()
+        ctx!.setLineDash([6, 9])
+        ctx!.lineDashOffset = -(tick * 0.35) % 15
+        ctx!.strokeStyle   = grad
+        ctx!.lineWidth     = 1.1
+        ctx!.globalAlpha   = 0.65
         ctx!.beginPath()
-        ctx!.arc(d.x, d.y, 1.8, 0, Math.PI * 2)
-        ctx!.fill()
+        const cpX = (hub.x + region.x) / 2
+        const cpY = (hub.y + region.y) / 2 - Math.hypot(region.x - hub.x, region.y - hub.y) * 0.18
+        ctx!.moveTo(hub.x, hub.y)
+        ctx!.quadraticCurveTo(cpX, cpY, region.x, region.y)
+        ctx!.stroke()
+        ctx!.restore()
       }
 
-      if (hub) {
-        for (const city of mapped.filter(c => !c.primary)) {
-          const cpX  = (hub.x + city.x) / 2
-          const cpY  = (hub.y + city.y) / 2 - Math.hypot(city.x - hub.x, city.y - hub.y) * 0.2
-          const grad = ctx!.createLinearGradient(hub.x, hub.y, city.x, city.y)
-          grad.addColorStop(0, 'rgba(124,58,237,0.55)')
-          grad.addColorStop(1, `rgba(${city.rgb[0]},${city.rgb[1]},${city.rgb[2]},0.25)`)
-          ctx!.save()
-          ctx!.setLineDash([6, 9])
-          ctx!.lineDashOffset = -(tick * 0.35) % 15
-          ctx!.strokeStyle   = grad
-          ctx!.lineWidth     = 1.1
-          ctx!.globalAlpha   = 0.65
-          ctx!.beginPath()
-          ctx!.moveTo(hub.x, hub.y)
-          ctx!.quadraticCurveTo(cpX, cpY, city.x, city.y)
-          ctx!.stroke()
-          ctx!.restore()
-        }
-      }
+      // Draw dots and labels
+      positioned.forEach((region, i) => {
+        const [r0, g0, b0] = region.rgb
+        const r = region.baseR
 
-      mapped.forEach((city, i) => {
-        const [r0, g0, b0] = city.rgb
-
-        for (let p = 0; p < city.pulses; p++) {
-          const phase = (tick * 0.016 + p * (1 / city.pulses) + i * 0.12) % 1
-          const maxR  = city.primary ? 36 : 24
-          const alpha = (1 - phase) * (city.primary ? 0.55 : 0.38)
+        // Pulse rings
+        for (let p = 0; p < region.pulses; p++) {
+          const phase = (tick * 0.016 + p * (1 / region.pulses) + i * 0.12) % 1
+          const maxPR = region.primary ? 38 : 22
+          const alpha = (1 - phase) * (region.primary ? 0.55 : 0.38)
           ctx!.strokeStyle = `rgba(${r0},${g0},${b0},${alpha})`
-          ctx!.lineWidth   = city.primary ? 2.2 : 1.6
+          ctx!.lineWidth   = region.primary ? 2.4 : 1.6
           ctx!.beginPath()
-          ctx!.arc(city.x, city.y, city.r + phase * maxR, 0, Math.PI * 2)
+          ctx!.arc(region.x, region.y, r + phase * maxPR, 0, Math.PI * 2)
           ctx!.stroke()
         }
 
-        const glow = ctx!.createRadialGradient(city.x, city.y, 0, city.x, city.y, city.r * 3.5)
-        glow.addColorStop(0, `rgba(${r0},${g0},${b0},0.35)`)
+        // Glow
+        const glow = ctx!.createRadialGradient(region.x, region.y, 0, region.x, region.y, r * 3.5)
+        glow.addColorStop(0, `rgba(${r0},${g0},${b0},0.3)`)
         glow.addColorStop(1, 'transparent')
         ctx!.fillStyle = glow
         ctx!.beginPath()
-        ctx!.arc(city.x, city.y, city.r * 3.5, 0, Math.PI * 2)
+        ctx!.arc(region.x, region.y, r * 3.5, 0, Math.PI * 2)
         ctx!.fill()
 
+        // Core dot
         ctx!.fillStyle = `rgb(${r0},${g0},${b0})`
         ctx!.beginPath()
-        ctx!.arc(city.x, city.y, city.r, 0, Math.PI * 2)
+        ctx!.arc(region.x, region.y, r, 0, Math.PI * 2)
         ctx!.fill()
 
-        ctx!.fillStyle = 'rgba(255,255,255,0.88)'
+        // White centre
+        ctx!.fillStyle = 'rgba(255,255,255,0.9)'
         ctx!.beginPath()
-        ctx!.arc(city.x, city.y, city.r * 0.38, 0, Math.PI * 2)
+        ctx!.arc(region.x, region.y, r * 0.38, 0, Math.PI * 2)
         ctx!.fill()
 
-        ctx!.font      = `${city.primary ? '600' : '400'} ${city.primary ? 11 : 9}px Rubik, sans-serif`
-        const tw       = ctx!.measureText(city.name).width
-        const lx       = city.x > W * 0.82 ? city.x - city.r - 6 - tw : city.x + city.r + 6
-        ctx!.fillStyle = city.primary ? `rgb(${r0},${g0},${b0})` : 'rgba(80,40,130,0.82)'
-        ctx!.fillText(city.name, lx, city.y + 4)
+        // Label — CHANGE: Latvia no longer shows "HQ" in its name text on the canvas
+        // (HQ is only shown in the legend). The ★ HQ badge below the dot is also removed.
+        const fontSize = region.primary ? 11 : 9
+        const weight   = region.primary ? '700' : '500'
+        ctx!.font      = `${weight} ${fontSize}px Rubik, sans-serif`
+        const tw       = ctx!.measureText(region.name).width
+
+        let lx = region.x + r + 7
+        let ly = region.y + 4
+        if (region.x > W * 0.78) { lx = region.x - r - 7 - tw }
+        if (region.primary) { ly = region.y - r - 8 }
+
+        ctx!.fillStyle = region.primary ? `rgb(${r0},${g0},${b0})` : 'rgba(80,40,130,0.82)'
+        ctx!.fillText(region.name, lx, ly)
+
+        // CHANGE: removed the "★ HQ" badge that was drawn below the Latvia dot
       })
 
       tick++
@@ -304,8 +290,8 @@ function WorldMapCanvas() {
   return (
     <canvas
       ref={canvasRef}
-      width={1000}
-      height={480}
+      width={900}
+      height={340}
       style={{ width: '100%', height: 'auto', display: 'block' }}
     />
   )
@@ -433,7 +419,6 @@ export default function Home() {
       }
     }
 
-    // Fallback: if SSE isn't supported or fails completely, poll once
     async function pollOnce(): Promise<void> {
       try {
         const res  = await fetch(`${API}/api/stats`, { credentials: 'include' })
@@ -610,7 +595,6 @@ export default function Home() {
         return
       }
 
-      // Success
       setLoading(false)
       setModal(MESSAGES[cat])
       playZoom()
@@ -640,12 +624,14 @@ export default function Home() {
         @keyframes shake    { 0%,100%{transform:translateX(0)} 20%,60%{transform:translateX(-5px)} 40%,80%{transform:translateX(5px)} }
         @keyframes dotPulse { 0%,100%{box-shadow:0 0 0 0 rgba(124,58,237,0.35)} 50%{box-shadow:0 0 0 7px rgba(124,58,237,0)} }
         @keyframes ssePulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+        @keyframes qrGlow   { 0%,100%{box-shadow:0 0 0 0 rgba(124,58,237,0.18)} 50%{box-shadow:0 0 0 8px rgba(124,58,237,0.06)} }
 
         .fu1{animation:fadeUp .9s .08s cubic-bezier(.16,1,.3,1) both}
         .fu2{animation:fadeUp .9s .22s cubic-bezier(.16,1,.3,1) both}
         .fu3{animation:fadeUp .9s .36s cubic-bezier(.16,1,.3,1) both}
         .fu4{animation:fadeUp .9s .50s cubic-bezier(.16,1,.3,1) both}
         .fu5{animation:fadeUp .9s .64s cubic-bezier(.16,1,.3,1) both}
+        .fu6{animation:fadeUp .9s .78s cubic-bezier(.16,1,.3,1) both}
 
         .blink    {animation:blink    1.2s step-end infinite}
         .spin-btn {animation:spinAnim  .7s linear infinite}
@@ -654,14 +640,15 @@ export default function Home() {
         .shake-x  {animation:shake     .4s ease both}
         .dot-pulse{animation:dotPulse  2s  ease infinite}
         .sse-pulse{animation:ssePulse  1.5s ease infinite}
+        .qr-glow  {animation:qrGlow    2.5s ease-in-out infinite}
 
         html{scroll-behavior:smooth}
         body{overflow-x:hidden;margin:0}
         *{box-sizing:border-box}
         ::selection{background:rgba(124,58,237,0.2)}
         input:focus{outline:none}
-        .map-card{transition:box-shadow .3s}
-        .map-card:hover{box-shadow:0 20px 80px rgba(124,58,237,0.14)!important}
+        .launch-card{transition:box-shadow .3s}
+        .launch-card:hover{box-shadow:0 20px 80px rgba(124,58,237,0.14)!important}
         .cat-btn{transition:all .18s ease}
         .cat-btn:hover{transform:translateY(-2px)}
       `}</style>
@@ -677,24 +664,90 @@ export default function Home() {
 
       <main style={{ position:'relative', zIndex:1 }}>
 
-        {/* 1 ── TOP STATEMENT */}
-        <section className="fu1" style={{ paddingTop:'clamp(40px,6vw,72px)', paddingBottom:0, paddingLeft:16, paddingRight:16, textAlign:'center' }}>
-          <div style={{ display:'inline-block', padding:'8px 20px', borderRadius:999, marginBottom:16, background:'rgba(124,58,237,0.07)', border:'1px solid rgba(124,58,237,0.14)' }}>
-            <span style={{ fontSize:'clamp(8px,1.4vw,11px)', color:'#7C3AED', fontWeight:600, letterSpacing:'0.28em', textTransform:'uppercase' }}>
-              A Nexfluence Product
-            </span>
+        {/* 1 ── TOP STATEMENT + QR CODE */}
+        <section className="fu1" style={{ paddingTop:'clamp(40px,6vw,72px)', paddingBottom:0, paddingLeft:16, paddingRight:16 }}>
+          <div style={{ maxWidth:900, margin:'0 auto', display:'flex', alignItems:'flex-start', justifyContent:'center', gap:'clamp(24px,4vw,64px)', flexWrap:'wrap' }}>
+
+            {/* Main headline */}
+            <div style={{ flex:'1 1 340px', textAlign:'center' }}>
+              <div style={{ display:'inline-block', padding:'8px 20px', borderRadius:999, marginBottom:16, background:'rgba(124,58,237,0.07)', border:'1px solid rgba(124,58,237,0.14)' }}>
+                <span style={{ fontSize:'clamp(8px,1.4vw,11px)', color:'#7C3AED', fontWeight:600, letterSpacing:'0.28em', textTransform:'uppercase' }}>
+                  A Nexfluence Product
+                </span>
+              </div>
+              <h1 style={{ fontSize:'clamp(22px,4.5vw,54px)', fontWeight:900, lineHeight:1.12, letterSpacing:'-0.02em', color:'#111', margin:'0 auto 12px', maxWidth:740 }}>
+                Influencer marketing is{' '}
+                <span style={{ background:'linear-gradient(90deg,#7C3AED,#EC4899)', WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent', backgroundClip:'text' }}>
+                  changing forever.
+                </span>
+                <br />
+                Welcome to the launch of <span style={{ color:'#7C3AED' }}>Nexus.</span>
+              </h1>
+              <p style={{ fontSize:'clamp(13px,2vw,17px)', fontWeight:300, color:'#6B7280', lineHeight:1.7, maxWidth:500, margin:'0 auto' }}>
+                The precision platform for brands, creators &amp; agencies who demand real results — not reach, but revenue.
+              </p>
+            </div>
+
+            {/* QR Code — CHANGE: replaced generated SVG with your own file from /public */}
+            <div style={{ display:'flex', flexDirection:'column', alignItems:'center', gap:12, flexShrink:0 }}>
+              {/* "Scan me" label above */}
+              <div style={{ display:'flex', alignItems:'center', gap:6 }}>
+                <span style={{ fontSize:'clamp(7px,1.1vw,9px)', fontWeight:700, letterSpacing:'0.32em', textTransform:'uppercase', color:'#9CA3AF' }}>
+                  ↓ Scan the code
+                </span>
+              </div>
+
+              {/* QR card */}
+              <div
+                className="qr-glow"
+                style={{
+                  background: 'white',
+                  borderRadius: 'clamp(14px,2vw,22px)',
+                  padding: 'clamp(12px,2vw,18px)',
+                  border: '1.5px solid rgba(124,58,237,0.14)',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  gap: 10,
+                  boxShadow: '0 6px 32px rgba(124,58,237,0.10)',
+                }}
+              >
+                {/*
+                  ── YOUR QR CODE ──────────────────────────────────────────────
+                  Replace "your-qr-code.svg" with your actual filename.
+                  The file must be placed in the /public folder of your Next.js
+                  project. Next.js serves /public at the root path automatically.
+                  Example: if your file is /public/nexus-qr.svg, use src="/nexus-qr.svg"
+                  ──────────────────────────────────────────────────────────────
+                */}
+                <img
+                  src="/qrcode.svg"
+                  alt="Nexus QR Code"
+                  width={184}
+                  height={184}
+                  style={{ display: 'block' }}
+                />
+
+                {/* Nexus logo mark inside bottom of card */}
+                <div style={{ display:'flex', alignItems:'center', gap:6 }}>
+                  <div style={{ width:18, height:18, borderRadius:6, background:'linear-gradient(135deg,#7C3AED,#EC4899)', display:'flex', alignItems:'center', justifyContent:'center', color:'white', fontSize:9, fontWeight:900, flexShrink:0 }}>✦</div>
+                  <span style={{ fontSize:'clamp(8px,1.2vw,10px)', fontWeight:700, letterSpacing:'0.16em', color:'#7C3AED' }}>NEXUS</span>
+                </div>
+              </div>
+
+              {/* "Join now" label below */}
+              <div style={{ textAlign:'center' }}>
+                <span style={{ fontSize:'clamp(9px,1.3vw,11px)', fontWeight:600, color:'#7C3AED', letterSpacing:'0.06em' }}>
+                  Join now →
+                </span>
+                <br />
+                <span style={{ fontSize:'clamp(7px,1.1vw,9px)', fontWeight:400, color:'#9CA3AF' }}>
+                  nexfluence.com/nexus
+                </span>
+              </div>
+            </div>
+
           </div>
-          <h1 style={{ fontSize:'clamp(22px,4.5vw,54px)', fontWeight:900, lineHeight:1.12, letterSpacing:'-0.02em', color:'#111', margin:'0 auto 12px', maxWidth:740 }}>
-            Influencer marketing is{' '}
-            <span style={{ background:'linear-gradient(90deg,#7C3AED,#EC4899)', WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent', backgroundClip:'text' }}>
-              changing forever.
-            </span>
-            <br />
-            Welcome to the launch of <span style={{ color:'#7C3AED' }}>Nexus.</span>
-          </h1>
-          <p style={{ fontSize:'clamp(13px,2vw,17px)', fontWeight:300, color:'#6B7280', lineHeight:1.7, maxWidth:500, margin:'0 auto' }}>
-            The precision platform for brands, creators &amp; agencies who demand real results — not reach, but revenue.
-          </p>
         </section>
 
         {/* 2 ── COUNTDOWN */}
@@ -719,13 +772,40 @@ export default function Home() {
           </div>
         </section>
 
-        {/* 3 ── WORLD MAP */}
+        {/* 3 ── GLOBAL LAUNCH PANEL */}
         <section className="fu3" style={{ padding:'0 clamp(12px,3vw,32px) clamp(8px,2vw,16px)' }}>
           <div style={{ maxWidth:1000, margin:'0 auto' }}>
-            <p style={{ textAlign:'center', fontSize:'clamp(8px,1.3vw,10px)', fontWeight:600, letterSpacing:'0.35em', textTransform:'uppercase', color:'#9CA3AF', marginBottom:20 }}>
-              Our community is already global
-            </p>
-            <div className="map-card" style={{ borderRadius:'clamp(16px,2.5vw,28px)', overflow:'hidden', position:'relative', background:'rgba(255,255,255,0.72)', border:'1.5px solid rgba(124,58,237,0.1)', boxShadow:'0 8px 48px rgba(124,58,237,0.08)', backdropFilter:'blur(16px)' }}>
+
+            {/* Header */}
+            <div style={{ textAlign:'center', marginBottom:'clamp(20px,3vw,36px)' }}>
+              <p style={{ fontSize:'clamp(8px,1.3vw,10px)', fontWeight:600, letterSpacing:'0.35em', textTransform:'uppercase', color:'#9CA3AF', marginBottom:12 }}>
+                Simultaneous Global Launch
+              </p>
+              <h3 style={{ fontSize:'clamp(18px,3vw,28px)', fontWeight:900, letterSpacing:'-0.02em', color:'#111', margin:'0 auto 10px', maxWidth:640, lineHeight:1.2 }}>
+                Launching simultaneously{' '}
+                <span style={{ background:'linear-gradient(90deg,#7C3AED,#EC4899)', WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent', backgroundClip:'text' }}>
+                  across the globe
+                </span>
+              </h3>
+              <p style={{ fontSize:'clamp(12px,1.6vw,14px)', fontWeight:300, color:'#6B7280', lineHeight:1.6, maxWidth:480, margin:'0 auto' }}>
+                From our headquarters in Riga, Latvia — going live across {REGIONS.length} regions at the same moment on May 4th.
+              </p>
+            </div>
+
+            {/* Canvas panel */}
+            <div
+              className="launch-card"
+              style={{
+                borderRadius:'clamp(16px,2.5vw,28px)',
+                overflow:'hidden',
+                position:'relative',
+                background:'rgba(255,255,255,0.72)',
+                border:'1.5px solid rgba(124,58,237,0.1)',
+                boxShadow:'0 8px 48px rgba(124,58,237,0.08)',
+                backdropFilter:'blur(16px)',
+              }}
+            >
+              {/* Legend */}
               <div style={{ position:'absolute', top:'clamp(8px,1.5vw,16px)', right:'clamp(8px,1.5vw,16px)', display:'flex', flexDirection:'column', gap:6, zIndex:10 }}>
                 {LEGEND_ITEMS.map(leg => (
                   <div key={leg.label} style={{ display:'flex', alignItems:'center', gap:6 }}>
@@ -734,13 +814,29 @@ export default function Home() {
                   </div>
                 ))}
               </div>
-              <WorldMapCanvas />
+
+              <GlobalLaunchPanel />
             </div>
-            <div style={{ display:'flex', flexWrap:'wrap', justifyContent:'center', gap:8, marginTop:16 }}>
-              {CITIES.map(c => (
-                <span key={c.name} style={{ display:'flex', alignItems:'center', gap:6, padding:'6px 12px', borderRadius:999, fontSize:'clamp(9px,1.3vw,11px)', fontWeight:500, background: c.primary ? 'rgba(124,58,237,0.1)' : 'rgba(255,255,255,0.85)', border:`1px solid rgba(${c.rgb[0]},${c.rgb[1]},${c.rgb[2]},${c.primary ? 0.4 : 0.18})`, color: c.primary ? '#7C3AED' : '#6B40A8' }}>
-                  <span style={{ display:'inline-block', width:6, height:6, borderRadius:'50%', background:`rgb(${c.rgb[0]},${c.rgb[1]},${c.rgb[2]})`, flexShrink:0 }} />
-                  {c.name}{c.primary ? ' ★' : ''}
+
+            {/* Region pills */}
+            <div style={{ display:'flex', flexWrap:'wrap', justifyContent:'center', gap:8, marginTop:'clamp(16px,2.5vw,28px)' }}>
+              {REGIONS.map(r => (
+                <span
+                  key={r.name}
+                  style={{
+                    display:'flex', alignItems:'center', gap:6,
+                    padding:'clamp(6px,1vw,8px) clamp(10px,1.5vw,14px)',
+                    borderRadius:999,
+                    fontSize:'clamp(9px,1.3vw,11px)',
+                    fontWeight: r.primary ? 700 : 500,
+                    background: r.primary ? 'rgba(124,58,237,0.1)' : 'rgba(255,255,255,0.85)',
+                    border:`1px solid rgba(${r.rgb[0]},${r.rgb[1]},${r.rgb[2]},${r.primary ? 0.4 : 0.18})`,
+                    color: r.primary ? '#7C3AED' : '#6B40A8',
+                  }}
+                >
+                  <span style={{ display:'inline-block', width:6, height:6, borderRadius:'50%', background:`rgb(${r.rgb[0]},${r.rgb[1]},${r.rgb[2]})`, flexShrink:0 }} />
+                  {r.name}
+                  {r.primary ? ' ★' : ''}
                 </span>
               ))}
             </div>
