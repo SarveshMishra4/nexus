@@ -1,27 +1,28 @@
-import type { ReactNode } from 'react'
-import { Rubik } from 'next/font/google'
-import './globals.css'
+import type { Metadata } from "next";
+import { Rubik } from "next/font/google";
+import "./globals.css";
 
 const rubik = Rubik({
-  subsets: ['latin'],
-  weight: ['300', '400', '500', '600', '700', '800', '900'],
-  style: ['normal', 'italic'],
-  display: 'swap',
-  variable: '--font-rubik',
-})
+  subsets: ["latin"],
+  weight: ["400", "500", "700", "900"],
+  variable: "--font-rubik",
+  display: "swap",
+});
 
-export const metadata = {
-  title: 'Nexus — The Creator Marketing Platform',
+export const metadata: Metadata = {
+  title: "Nex · You're Invited — May 28, 2026",
   description:
-    'Influencer marketing is changing forever. Welcome to the launch of Nexus — the precision platform for brands, influencers, and agencies who demand real results.',
-}
+    "A private gathering for the Baltics' next generation of creators. By invitation only. 100 seats.",
+};
 
-export default function RootLayout({ children }: { children: ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="en" className={rubik.variable}>
-      <body style={{ fontFamily: 'var(--font-rubik), sans-serif', margin: 0 }}>
-        {children}
-      </body>
+      <body>{children}</body>
     </html>
-  )
+  );
 }
