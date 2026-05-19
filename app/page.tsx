@@ -388,28 +388,145 @@ function Sponsors() {
   );
 }
 
-// ─── Brand Marquee ────────────────────────────────────────────────────────
-const MARQUEE_BRANDS = ["Artisan Street Bakery", "Molberts", "Fizio Line", "Street Burgers", "Gardu Muti", "Street Pizza"];
+/* ──────────────────────────────────────────────
+   BRAND LOGOS MARQUEE
+   CHANGES:
+   1. Gap reduced to half (using margin + max-content)
+   2. Rounded corners visibly apply to the images
+   3. Exact same huge sizing retained
+   4. Dead container space removed
+────────────────────────────────────────────── */
+
+const MARQUEE_BRANDS = [
+  { src: "/Artisan Street Bakery.webp", alt: "Artisan Street Bakery" },
+  { src: "/Molberts.webp", alt: "Molberts" },
+  { src: "/Fizio Line.webp", alt: "Fizio Line" },
+  { src: "/Gardu Muti.webp", alt: "Gardu Muti" },
+  { src: "/Street Pizza.webp", alt: "Street Pizza" },
+  { src: "/Street Burgers.webp", alt: "Street Burgers" },
+];
+
 function BrandMarquee() {
   const items = [...MARQUEE_BRANDS, ...MARQUEE_BRANDS];
+
   return (
-    <div style={{
-      marginTop: 10, borderRadius: 14, border: `1px solid ${C.vBorder}`,
-      height: 72, overflow: "hidden", position: "relative", background: "rgba(128,97,255,0.06)",
-    }}>
+    <div
+      style={{
+        marginTop: 10,
+        borderRadius: 14,
+        border: `1px solid ${C.vBorder}`,
+        height: 180,
+        overflow: "hidden",
+        position: "relative",
+        background: "rgba(128,97,255,0.06)",
+      }}
+    >
       <style>{`
-        @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-        .brand-track { display: inline-flex; align-items: center; height: 100%; white-space: nowrap; animation: marquee 18s linear infinite; will-change: transform; }
-        .brand-track:hover { animation-play-state: paused; }
+        @keyframes marqueeLogo {
+          from { transform: translateX(0); }
+          to { transform: translateX(-50%); }
+        }
+
+        .brand-track-logo {
+          display: inline-flex;
+          align-items: center;
+          height: 100%;
+          white-space: nowrap;
+          animation: marqueeLogo 22s linear infinite;
+          will-change: transform;
+        }
+
+        .brand-track-logo:hover {
+          animation-play-state: paused;
+        }
+
+        /* Container now tightly hugs the image to remove dead space */
+        .brand-logo-wrap {
+          width: max-content;
+          height: 140px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          /* Exact gap between logos. Adjust this if you need it even tighter */
+          margin: 0 15px;
+
+          /* invisible container */
+          background: transparent;
+          border: none;
+          box-shadow: none;
+          backdrop-filter: none;
+        }
+
+        .brand-logo {
+          /* Width 'auto' ensures the logo determines its own width strictly based on the 140px height without shrinking */
+          width: auto;
+          height: 100%;
+          object-fit: cover;
+
+          /* Rounded corners now apply to the precise edges of the image */
+          border-radius: 14px;
+
+          opacity: 0.96;
+
+          filter:
+            drop-shadow(0 0 18px rgba(128,97,255,0.18))
+            drop-shadow(0 0 28px rgba(255,51,188,0.12));
+
+          transition: transform 0.25s ease;
+        }
+
+        .brand-logo:hover {
+          transform: scale(1.04);
+        }
       `}</style>
-      <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse at 50% 50%, rgba(128,97,255,0.3) 0%, rgba(255,51,188,0.18) 35%, transparent 65%)", filter: "blur(22px)", pointerEvents: "none", zIndex: 1 }} />
-      <div style={{ position: "absolute", inset: 0, background: `linear-gradient(90deg, ${C.ink} 0%, transparent 12%, transparent 88%, ${C.ink} 100%)`, pointerEvents: "none", zIndex: 2 }} />
-      <div className="brand-track" style={{ zIndex: 3, position: "relative" }}>
+
+      {/* Neon glow layer */}
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          background:
+            "radial-gradient(ellipse at 50% 50%, rgba(128,97,255,0.3) 0%, rgba(255,51,188,0.18) 35%, transparent 65%)",
+          filter: "blur(22px)",
+          pointerEvents: "none",
+          zIndex: 1,
+        }}
+      />
+
+      {/* Edge fade */}
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          background: `linear-gradient(
+            90deg,
+            ${C.ink} 0%,
+            transparent 10%,
+            transparent 90%,
+            ${C.ink} 100%
+          )`,
+          pointerEvents: "none",
+          zIndex: 2,
+        }}
+      />
+
+      {/* Moving logos */}
+      <div
+        className="brand-track-logo"
+        style={{
+          zIndex: 3,
+          position: "relative",
+        }}
+      >
         {items.map((brand, i) => (
-          <span key={i} style={{ display: "inline-flex", alignItems: "center" }}>
-            <span style={{ fontFamily: FONT, fontSize: 15, fontWeight: 700, color: C.white, letterSpacing: "0.02em", padding: "0 32px", textShadow: "0 1px 8px rgba(128,97,255,0.35)" }}>{brand}</span>
-            <span style={{ display: "inline-block", width: 4, height: 4, borderRadius: "50%", background: C.magenta, opacity: 0.7, flexShrink: 0 }} />
-          </span>
+          <div key={i} className="brand-logo-wrap">
+            <img
+              src={brand.src}
+              alt={brand.alt}
+              className="brand-logo"
+            />
+          </div>
         ))}
       </div>
     </div>
