@@ -152,7 +152,7 @@ function HeroMosaic() {
       >
         {/* Background mega image */}
         <img
-          src="/Event Place.webp"
+          src="/Skyline.webp"
           alt="Nex Event"
           style={{
             position: "absolute",
@@ -234,7 +234,7 @@ function HeroMosaic() {
               boxShadow: "0 4px 24px rgba(128,97,255,0.25)",
             }}
           >
-            <img src="/Scene 1.webp" alt="" style={fillImg} />
+            <img src="/Event Place.webp" alt="" style={fillImg} />
             <HeroCardCaption text="Beautiful Skyline Views" />
           </div>
 
@@ -250,7 +250,7 @@ function HeroMosaic() {
               boxShadow: "0 4px 20px rgba(128,97,255,0.2)",
             }}
           >
-            <img src="/Scene 2.webp" alt="" style={fillImg} />
+            <img src="/Food.webp" alt="" style={fillImg} />
             <HeroCardCaption text="Drinks & Snacks" />
           </div>
 
@@ -267,7 +267,7 @@ function HeroMosaic() {
             }}
           >
             <img
-              src="/Scene 3.webp"
+              src="/Space.webp"
               alt=""
               style={{ ...fillImg, objectPosition: "top" }}
             />
@@ -382,7 +382,7 @@ function Sponsors() {
         fontFamily: FONT, marginTop: 16, fontSize: 12, fontWeight: 400,
         color: "rgba(26,10,46,0.4)", letterSpacing: "0.06em", textAlign: "center",
       }}>
-        And More Participating Brands to be Announced Soon
+        And More Participating Businesses to be Announced Soon
       </p>
     </section>
   );
@@ -810,7 +810,7 @@ function LumaForm() {
           width="100%" height="600" scrolling="no" frameBorder="0"
           style={{ display: "block", border: "none", width: "calc(100% + 17px)", marginBottom: "-4px" }}
           allow="fullscreen; payment"
-          title="Apply to attend Nex"
+          title="Apply to attend Creator Nexus"
         />
       </div>
     </section>
@@ -822,7 +822,7 @@ function AboutNex() {
   return (
     <section style={{ marginTop: 64 }}>
       <Label text="Our Story" />
-      <h2 style={sectionTitle}>About Nex</h2>
+      <h2 style={sectionTitle}>About Us</h2>
       <p style={{ fontFamily: FONT, marginTop: 16, fontSize: 14, fontWeight: 400, lineHeight: 1.9, color: C.dimText }}>
         Nexfluence is an influencer marketing company built in the Baltics, scaling across Europe. We connect the right creators with the right brands through smart matching and performance-driven partnerships, so both sides win. Through Creator Nexus, our community and events platform, we invest in educating and elevating creators because they are the future of the creator economy and we stand with each one of them.
       </p>
