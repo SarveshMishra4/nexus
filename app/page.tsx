@@ -6,9 +6,9 @@
  *
  *   public/
  *   ├── Event Place.webp      ← Full-width top banner image
- *   ├── Nex.png               ← Logo
+ *   ├── Nex.webp              ← Logo
  *   ├── Scene 1.webp          ← Gallery square top-left
- *   ├── event-2.jpg           ← Gallery square top-middle
+ *   ├── Scene 2.webp          ← Gallery square top-middle
  *   ├── Recap.mp4             ← Gallery tall reel (right column, both rows)
  *   ├── Scene 3.webp          ← Gallery wide bottom-left
  *   ├── RedBull Image.webp    ← RedBull campaign image
@@ -20,16 +20,17 @@
 import { useEffect } from "react";
 
 const FONT = "'Rubik', var(--font-rubik), sans-serif";
+
 const C = {
-  ink:     "#0a0612",
-  pink:    "#ff7ac3",
-  magenta: "#ff33bc",
-  violet:  "#8061ff",
-  indigo:  "#6a66ff",
-  white:   "#ffffff",
-  dimText: "rgba(255,255,255,0.5)",
-  border:  "rgba(255,122,195,0.22)",
-  vBorder: "rgba(128,97,255,0.3)",
+  ink:     "#f7f5ff",              // page background — light lavender (in-palette)
+  pink:    "#ff7ac3",              // unchanged
+  magenta: "#ff33bc",              // unchanged
+  violet:  "#8061ff",              // unchanged
+  indigo:  "#6a66ff",              // unchanged
+  white:   "#1a0a2e",              // now: deep violet-ink used for headings/logo text
+  dimText: "rgba(26,10,46,0.55)",  // muted body text on light background
+  border:  "rgba(255,122,195,0.35)",
+  vBorder: "rgba(128,97,255,0.4)",
 } as const;
 
 // ─── Page ─────────────────────────────────────────────────────────────────
@@ -78,6 +79,7 @@ export default function Page() {
             bottom: 24,
             left: 24,
           }}>
+            {/* Text is always white here — it sits on top of a photo */}
             <div style={{
               fontFamily: FONT,
               fontSize: 15,
@@ -103,7 +105,7 @@ export default function Page() {
           </div>
         </div>
       </div>
-      {/* ── Main content — constrained width, left-aligned ── */}
+      {/* ── Main content — constrained width ── */}
       <main style={{ maxWidth: "calc(380px + 50vw)", padding: "0 32px", margin: "0 auto" }}>
         <LastHappenings />
         <Sponsors />
@@ -121,7 +123,7 @@ function LogoMark() {
   return (
     <div style={{ display: "inline-flex", alignItems: "center", gap: 12 }}>
       <img
-        src="/Nex.png"
+        src="/Nex.webp"
         alt="Nex logo"
         style={{
           width: 64,
@@ -137,9 +139,9 @@ function LogoMark() {
           fontWeight: 650,
           lineHeight: 1,
           letterSpacing: "-0.03em",
-          color: C.white,
+          color: C.white,          // deep violet-ink on light bg
         }}>
-          Nex
+          Creator Nexus
         </div>
         <div style={{
           fontFamily: FONT,
@@ -174,7 +176,7 @@ function LastHappenings() {
           <PhotoCaption text="Opening night" />
         </div>
         <div style={{ gridColumn: "2", gridRow: "1", ...photoCell }}>
-          <img src="/event-2.jpg" alt="Event photo 2" style={fillImg} />
+          <img src="/Scene 2.webp" alt="Event photo 2" style={fillImg} />
           <PhotoCaption text="Casting tables" />
         </div>
         <div style={{ gridColumn: "3", gridRow: "1 / span 2", ...photoCell }}>
@@ -188,7 +190,6 @@ function LastHappenings() {
           />
           <PhotoCaption text="Recap from Last Events" />
         </div>
-        {/* Scene 3 — objectPosition: top so subject isn't cropped from above */}
         <div style={{ gridColumn: "1 / span 2", gridRow: "2", ...photoCell }}>
           <img
             src="/Scene 3.webp"
@@ -261,12 +262,13 @@ function Sponsors() {
           justifyContent: "center",
           gap: 8,
         }}>
+          {/* Always white — sits on top of a photo */}
           <div style={{
             fontFamily: FONT,
             fontSize: 30,
             fontWeight: 900,
             letterSpacing: "-0.02em",
-            color: C.white,
+            color: "#ffffff",
             textShadow: "0 2px 18px rgba(128,97,255,0.95), 0 0 40px rgba(255,51,188,0.65)",
           }}>
             Red Bull
@@ -286,7 +288,15 @@ function Sponsors() {
       {/* ── Other sponsors — infinite scrolling strip ── */}
       <BrandMarquee />
       {/* trailing note */}
-      <p style={{ fontFamily: `'Rubik', var(--font-rubik), sans-serif`, marginTop: 16, fontSize: 12, fontWeight: 400, color: "rgba(255,255,255,0.35)", letterSpacing: "0.06em", textAlign: "center" }}>
+      <p style={{
+        fontFamily: `'Rubik', var(--font-rubik), sans-serif`,
+        marginTop: 16,
+        fontSize: 12,
+        fontWeight: 400,
+        color: "rgba(26,10,46,0.4)",   // dark muted on light bg
+        letterSpacing: "0.06em",
+        textAlign: "center",
+      }}>
         And More Participating Brands to be Announced Soon
       </p>
     </section>
@@ -329,12 +339,12 @@ function BrandMarquee() {
       <div style={{
         position: "absolute",
         inset: 0,
-        background: "radial-gradient(ellipse at 50% 50%, rgba(128,97,255,0.45) 0%, rgba(255,51,188,0.28) 35%, transparent 65%)",
+        background: "radial-gradient(ellipse at 50% 50%, rgba(128,97,255,0.3) 0%, rgba(255,51,188,0.18) 35%, transparent 65%)",
         filter: "blur(22px)",
         pointerEvents: "none",
         zIndex: 1,
       }} />
-      {/* Edge fades */}
+      {/* Edge fades — fade to the light page background */}
       <div style={{
         position: "absolute",
         inset: 0,
@@ -354,10 +364,10 @@ function BrandMarquee() {
               fontFamily: FONT,
               fontSize: 15,
               fontWeight: 700,
-              color: C.white,
+              color: C.white,          // deep violet-ink — readable on light strip
               letterSpacing: "0.02em",
               padding: "0 32px",
-              textShadow: "0 1px 10px rgba(128,97,255,0.9), 0 0 22px rgba(255,51,188,0.55)",
+              textShadow: "0 1px 8px rgba(128,97,255,0.35)",
             }}>
               {brand}
             </span>
@@ -367,8 +377,7 @@ function BrandMarquee() {
               height: 4,
               borderRadius: "50%",
               background: C.magenta,
-              opacity: 0.6,
-              boxShadow: `0 0 8px ${C.magenta}`,
+              opacity: 0.7,
               flexShrink: 0,
             }} />
           </span>
@@ -409,10 +418,9 @@ function KeynoteSpeakers() {
             borderRadius: 16,
             overflow: "hidden",
             height: 300,
-            background: "rgba(128,97,255,0.12)",
-            border: "1px solid rgba(255,255,255,0.05)",
+            background: "rgba(128,97,255,0.08)",
+            border: `1px solid ${C.vBorder}`,   // visible border on light bg
           }}>
-            {/* objectPosition: top — anchors to the face/top of portrait */}
             <img
               src={s.src}
               alt={s.name}
@@ -441,6 +449,7 @@ function KeynoteSpeakers() {
               bottom: 20,
               left: 18,
             }}>
+              {/* Always white — sits on top of a photo */}
               <div style={{
                 fontFamily: FONT,
                 fontSize: 16,
@@ -472,19 +481,10 @@ function KeynoteSpeakers() {
 }
 
 // ─── Luma Form ────────────────────────────────────────────────────────────
-// lu.ma is Luma's correct domain — luma.com does not serve embeds.
-// Scrollbar-space fix: iframe is 17px wider than container; overflow:hidden
-// on the wrapper clips the browser-reserved scrollbar column out of view.
-//
-// GA4 tracking:
-//   • "signup_section_viewed" — fires once when the section scrolls into view
-//   • "signup_section_clicked" — fires each time the user clicks inside it
 function LumaForm() {
   useEffect(() => {
     const el = document.getElementById("apply");
     if (!el) return;
-
-    // Fire once when the signup section becomes visible
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -498,7 +498,6 @@ function LumaForm() {
       { threshold: 0.5 }
     );
     observer.observe(el);
-
     return () => observer.disconnect();
   }, []);
 
@@ -515,7 +514,16 @@ function LumaForm() {
     >
       <Label text="Apply" />
       <h2 style={sectionTitle}>Sign Up</h2>
-      <p style={{ fontFamily: `'Rubik', var(--font-rubik), sans-serif`, marginTop: 10, marginBottom: 0, fontSize: 13, fontWeight: 500, color: "rgba(255,122,195,0.8)", letterSpacing: "0.04em", textAlign: "center" }}>
+      <p style={{
+        fontFamily: `'Rubik', var(--font-rubik), sans-serif`,
+        marginTop: 10,
+        marginBottom: 0,
+        fontSize: 13,
+        fontWeight: 500,
+        color: C.magenta,           // vivid magenta pops on light bg
+        letterSpacing: "0.04em",
+        textAlign: "center",
+      }}>
         Free for creators — no ticket, no fee, ever
       </p>
       <div style={{
@@ -534,8 +542,8 @@ function LumaForm() {
           style={{
             display: "block",
             border: "none",
-            width: "calc(100% + 17px)",   /* pushes scrollbar column outside the overflow:hidden clip */
-            marginBottom: "-4px",          /* removes the 4px inline gap browsers add below iframes */
+            width: "calc(100% + 17px)",
+            marginBottom: "-4px",
           }}
           allow="fullscreen; payment"
           title="Apply to attend Nex"
@@ -557,7 +565,7 @@ function AboutNex() {
         fontSize: 14,
         fontWeight: 400,
         lineHeight: 1.9,
-        color: C.dimText,
+        color: C.dimText,           // dark muted on light bg
       }}>
         Nex is the platform built in the Baltics, for the Baltics. We connect
         creators with the brands that actually operate here — not global
@@ -601,7 +609,7 @@ function PhotoCaption({ text }: { text: string }) {
         fontFamily: FONT,
         fontSize: 11,
         fontWeight: 500,
-        color: "rgba(255,255,255,0.9)",
+        color: "rgba(255,255,255,0.9)",   // always white — on top of photo
         letterSpacing: "0.05em",
         textShadow: "0 1px 10px rgba(128,97,255,0.9), 0 0 20px rgba(255,51,188,0.5)",
       }}>
@@ -618,7 +626,7 @@ const sectionTitle: React.CSSProperties = {
   fontWeight: 900,
   letterSpacing: "-0.03em",
   lineHeight: 1.1,
-  color: "#fff",
+  color: "#1a0a2e",               // deep violet-ink on light bg
   marginTop: 8,
   textAlign: "center",
 };
@@ -627,8 +635,8 @@ const photoCell: React.CSSProperties = {
   position: "relative",
   overflow: "hidden",
   borderRadius: 12,
-  background: "rgba(128,97,255,0.12)",
-  border: "1px solid rgba(255,255,255,0.05)",
+  background: "rgba(128,97,255,0.07)",
+  border: "1px solid rgba(128,97,255,0.2)",  // visible on light bg
 };
 
 const fillImg: React.CSSProperties = {
@@ -640,7 +648,7 @@ const fillImg: React.CSSProperties = {
   display: "block",
 };
 
-// ─── Type augmentation so TypeScript knows window.gtag exists ─────────────
+// ─── Type augmentation ────────────────────────────────────────────────────
 declare global {
   interface Window {
     gtag?: (...args: unknown[]) => void;
