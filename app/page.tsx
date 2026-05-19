@@ -776,22 +776,27 @@ function LumaForm() {
       }}>
         Free for creators — no ticket, no fee, ever
       </p>
-
-      {/*
-        Container is centred by .pm (max-width + margin auto).
-        overflow:hidden clips any internal scrollbar chrome.
-        The iframe takes full width so Luma's own centred form layout
-        sits properly within the container on every screen size.
-      */}
-      <div className="lo">
+      <div style={{
+        marginTop: 24,
+        borderRadius: 16,
+        border: `1px solid ${C.border}`,
+        overflow: "hidden",
+      }}>
         <iframe
           src="https://lu.ma/embed/event/evt-guA9zHzcVg5vgdw/simple"
-          className="li"
           scrolling="no"
           frameBorder="0"
-          style={{ border: "none" }}
           allow="fullscreen; payment"
           title="Apply to attend Creator Nexus"
+          style={{
+            display: "block",
+            border: "none",
+            width: "calc(100% + 17px)",
+            marginLeft: "-8.5px",
+            marginRight: "-8.5px",
+            height: 600,
+            marginBottom: -4,
+          }}
         />
       </div>
     </section>
