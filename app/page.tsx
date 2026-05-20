@@ -178,8 +178,8 @@ export default function Page() {
         <Sponsors />
         <KeynoteSpeakers />
         <LumaForm />
-        <AboutNex />
         <SocialConnect />
+        <AboutNex />
         <div style={{ height: 80 }} />
       </main>
     </div>
@@ -583,22 +583,6 @@ function LumaForm() {
     </section>
   );
 }
-/* ─── About ──────────────────────────────────────────────────────────────── */
-function AboutNex() {
-  return (
-    <section style={{ marginTop: 64 }}>
-      <Label text="Our Story" />
-      <h2 className="st" style={sectionTitle}>About Us</h2>
-      <p style={{ fontFamily: FONT, marginTop: 16, fontSize: 14, fontWeight: 400, lineHeight: 1.9, color: C.dimText }}>
-        Nexfluence is an influencer marketing company built in the Baltics, scaling across Europe.
-        We connect the right creators with the right brands through smart matching and
-        performance-driven partnerships, so both sides win. Through Creator Nexus, our community
-        and events platform, we invest in educating and elevating creators because they are the
-        future of the creator economy and we stand with each one of them.
-      </p>
-    </section>
-  );
-}
 /* ─── Instagram SVG icon (reusable) ─────────────────────────────────────── */
 function IgIcon({ color, size = 22 }: { color: string; size?: number }) {
   return (
@@ -790,6 +774,22 @@ function SocialConnect() {
           </div>
         </div>
       </div>
+    </section>
+  );
+}
+/* ─── About ──────────────────────────────────────────────────────────────── */
+function AboutNex() {
+  return (
+    <section style={{ marginTop: 64 }}>
+      <Label text="Our Story" />
+      <h2 className="st" style={sectionTitle}>About Us</h2>
+      <p style={{ fontFamily: FONT, marginTop: 16, fontSize: 14, fontWeight: 400, lineHeight: 1.9, color: C.dimText }}>
+        Nexfluence is an influencer marketing company built in the Baltics, scaling across Europe.
+        We connect the right creators with the right brands through smart matching and
+        performance-driven partnerships, so both sides win. Through Creator Nexus, our community
+        and events platform, we invest in educating and elevating creators because they are the
+        future of the creator economy and we stand with each one of them.
+      </p>
     </section>
   );
 }
