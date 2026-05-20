@@ -4,7 +4,6 @@
  * Optimised for mobile (<640 px), tablet (640–900 px), desktop (>900 px)
  */
 import { useEffect, useRef, useState } from "react";
-
 /* ─── Tokens ─────────────────────────────────────────────────────────────── */
 const FONT = "'Rubik', var(--font-rubik), sans-serif";
 const C = {
@@ -17,13 +16,11 @@ const C = {
   border:  "rgba(255,122,195,0.35)",
   vBorder: "rgba(128,97,255,0.4)",
 } as const;
-
 /* ─── Types ──────────────────────────────────────────────────────────────── */
 type Speaker = {
   src: string; name: string; role: string;
   instagram: string; handle: string; bio: string;
 };
-
 /* ─── Hook ───────────────────────────────────────────────────────────────── */
 function useWindowWidth() {
   const [w, setW] = useState(1200);
@@ -35,7 +32,6 @@ function useWindowWidth() {
   }, []);
   return w;
 }
-
 /* ─── Global CSS ─────────────────────────────────────────────────────────── */
 const GS = `
   *, *::before, *::after { box-sizing: border-box; }
@@ -122,7 +118,6 @@ const GS = `
   .ml:hover { transform: scale(1.04); }
   @media (max-width: 640px)                        { .mi { height: 78px; margin: 0 8px; } .ml { border-radius: 8px; } }
   @media (min-width: 641px) and (max-width: 900px) { .mi { height: 108px; margin: 0 11px; } }
-
   /* ── Luma — no border, small radius, hidden scrollbar ── */
   .lo {
     margin-top: 24px;
@@ -139,7 +134,6 @@ const GS = `
   .luma-scroll::-webkit-scrollbar { display: none; }
   @media (max-width: 640px)                        { .luma-scroll { height: 580px; } }
   @media (min-width: 641px) and (max-width: 900px) { .luma-scroll { height: 600px; } }
-
   .sc  { position: relative; overflow: hidden; cursor: pointer; }
   .sf  {
     position: absolute; inset: 0;
@@ -148,7 +142,6 @@ const GS = `
   }
   .sc:hover .sf { opacity: 1; }
 `;
-
 /* ─── Page ───────────────────────────────────────────────────────────────── */
 export default function Page() {
   return (
@@ -167,7 +160,6 @@ export default function Page() {
     </div>
   );
 }
-
 /* ─── Logo ───────────────────────────────────────────────────────────────── */
 function LogoMark() {
   return (
@@ -184,7 +176,6 @@ function LogoMark() {
     </div>
   );
 }
-
 /* ─── Hero Card Caption ──────────────────────────────────────────────────── */
 function HeroCardCaption({ text, small }: { text: string; small?: boolean }) {
   return (
@@ -207,7 +198,6 @@ function HeroCardCaption({ text, small }: { text: string; small?: boolean }) {
     </>
   );
 }
-
 /* ─── Hero Mosaic ────────────────────────────────────────────────────────── */
 function HeroMosaic() {
   const w      = useWindowWidth();
@@ -274,7 +264,6 @@ function HeroMosaic() {
     </div>
   );
 }
-
 /* ─── Recap Video ────────────────────────────────────────────────────────── */
 function RecapVideo() {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -305,7 +294,6 @@ function RecapVideo() {
     </>
   );
 }
-
 /* ─── Last Happenings ────────────────────────────────────────────────────── */
 function LastHappenings() {
   const w       = useWindowWidth();
@@ -317,7 +305,20 @@ function LastHappenings() {
       <h2 className="st" style={sectionTitle}>Our Last Event</h2>
       {compact ? (
         <div style={{ marginTop: 24, display: "flex", flexDirection: "column", gap: mobile ? 7 : 10 }}>
-          <div style={{ ...photoCell, height: mobile ? 215 : 265 }}>
+          {/* ── Video cell: 9:16 aspect ratio on mobile, fixed height on tablet ── */}
+          <div
+            style={{
+              ...photoCell,
+              ...(mobile
+                ? {
+                    alignSelf: "center",
+                    width: "60%",
+                    aspectRatio: "9 / 16",
+                    height: undefined,
+                  }
+                : { height: 265 }),
+            }}
+          >
             <RecapVideo />
             <PhotoCaption text="Recap from Last Events" />
           </div>
@@ -359,7 +360,6 @@ function LastHappenings() {
     </section>
   );
 }
-
 /* ─── Sponsors ───────────────────────────────────────────────────────────── */
 function Sponsors() {
   return (
@@ -376,7 +376,6 @@ function Sponsors() {
     </section>
   );
 }
-
 /* ─── Brand Marquee ──────────────────────────────────────────────────────── */
 const MARQUEE_BRANDS = [
   { src: "/Artisan Street Bakery.webp", alt: "Artisan Street Bakery" },
@@ -402,7 +401,6 @@ function BrandMarquee() {
     </div>
   );
 }
-
 /* ─── Speaker Modal ──────────────────────────────────────────────────────── */
 function SpeakerModal({ speaker, onClose }: { speaker: Speaker; onClose: () => void }) {
   useEffect(() => {
@@ -443,7 +441,6 @@ function SpeakerModal({ speaker, onClose }: { speaker: Speaker; onClose: () => v
     </div>
   );
 }
-
 /* ─── Keynote Speakers ───────────────────────────────────────────────────── */
 function KeynoteSpeakers() {
   const speakers: Speaker[] = [
@@ -469,7 +466,6 @@ function KeynoteSpeakers() {
   const mobile  = w < 640;
   const compact = w < 900;
   const cardH   = mobile ? 225 : compact ? 268 : 300;
-
   return (
     <section style={{ marginTop: 64 }}>
       <Label text="On Stage" />
@@ -500,8 +496,7 @@ function KeynoteSpeakers() {
             >
               <img src={s.src} alt={s.name} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", objectPosition: "top", display: "block" }} />
               <div style={{ position: "absolute", bottom: -40, left: -40, width: "100%", height: 200, background: "radial-gradient(ellipse at 30% 85%, rgba(20,10,40,0.60) 0%, rgba(20,10,40,0.28) 42%, transparent 72%)", filter: "blur(20px)", pointerEvents: "none" }} />
-
-              {/* Eye icon — always visible on mobile, fades in on hover on desktop */}
+              {/* Eye icon — transparent background, always visible on mobile, fades in on hover on desktop */}
               <div
                 className="svh"
                 style={{
@@ -509,8 +504,7 @@ function KeynoteSpeakers() {
                   opacity: mobile ? 1 : 0,
                   display: "flex", alignItems: "center", justifyContent: "center",
                   width: 36, height: 36,
-                  background: "rgba(16,6,36,0.52)",
-                  backdropFilter: "blur(8px)",
+                  background: "transparent",
                   border: "1px solid rgba(255,122,195,0.5)",
                   borderRadius: "50%",
                 }}
@@ -520,7 +514,6 @@ function KeynoteSpeakers() {
                   <circle cx="12" cy="12" r="3" />
                 </svg>
               </div>
-
               <div style={{ position: "absolute", bottom: mobile ? 13 : 20, left: mobile ? 12 : 18 }}>
                 <div style={{ fontFamily: FONT, fontSize: mobile ? 13 : 16, fontWeight: 700, color: "#ffffff", letterSpacing: "-0.01em", lineHeight: 1.2, textShadow: "0 1px 12px rgba(128,97,255,0.9), 0 0 28px rgba(255,51,188,0.55)" }}>{s.name}</div>
                 <div style={{ fontFamily: FONT, fontSize: mobile ? 10 : 12, fontWeight: 400, color: "rgba(255,255,255,0.8)", marginTop: 4, letterSpacing: "0.04em", textShadow: "0 1px 8px rgba(128,97,255,0.8)" }}>{s.role}</div>
@@ -533,7 +526,6 @@ function KeynoteSpeakers() {
     </section>
   );
 }
-
 /* ─── Luma Form ──────────────────────────────────────────────────────────── */
 function LumaForm() {
   useEffect(() => {
@@ -551,7 +543,6 @@ function LumaForm() {
     observer.observe(el);
     return () => observer.disconnect();
   }, []);
-
   return (
     <section id="apply" style={{ marginTop: 64 }} onClick={() => window.gtag?.("event", "signup_section_clicked", { event_category: "engagement", event_label: "luma_form" })}>
       <Label text="Apply" />
@@ -575,7 +566,6 @@ function LumaForm() {
     </section>
   );
 }
-
 /* ─── About ──────────────────────────────────────────────────────────────── */
 function AboutNex() {
   return (
@@ -592,7 +582,6 @@ function AboutNex() {
     </section>
   );
 }
-
 /* ─── Shared helpers ─────────────────────────────────────────────────────── */
 function Label({ text }: { text: string }) {
   return (
@@ -601,7 +590,6 @@ function Label({ text }: { text: string }) {
     </div>
   );
 }
-
 function PhotoCaption({ text }: { text: string }) {
   return (
     <>
@@ -612,7 +600,6 @@ function PhotoCaption({ text }: { text: string }) {
     </>
   );
 }
-
 /* ─── Style constants ────────────────────────────────────────────────────── */
 const sectionTitle: React.CSSProperties = {
   fontFamily: FONT, fontWeight: 900, letterSpacing: "-0.03em",
@@ -626,7 +613,6 @@ const fillImg: React.CSSProperties = {
   position: "absolute", inset: 0, width: "100%", height: "100%",
   objectFit: "cover", display: "block",
 };
-
 /* ─── Window type augment ────────────────────────────────────────────────── */
 declare global {
   interface Window { gtag?: (...args: unknown[]) => void; }
