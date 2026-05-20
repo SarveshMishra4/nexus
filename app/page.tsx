@@ -16,6 +16,9 @@ const C = {
   border:  "rgba(255,122,195,0.35)",
   vBorder: "rgba(128,97,255,0.4)",
 } as const;
+/* ─── Instagram links — EDIT THESE TWO ──────────────────────────────────── */
+const IG_PROFILE_URL   = "https://www.instagram.com/YOUR_HANDLE";         // ← REPLACE
+const IG_COMMUNITY_URL = "https://www.instagram.com/YOUR_COMMUNITY_LINK"; // ← REPLACE
 /* ─── Types ──────────────────────────────────────────────────────────────── */
 type Speaker = {
   src: string; name: string; role: string;
@@ -118,7 +121,6 @@ const GS = `
   .ml:hover { transform: scale(1.04); }
   @media (max-width: 640px)                        { .mi { height: 78px; margin: 0 8px; } .ml { border-radius: 8px; } }
   @media (min-width: 641px) and (max-width: 900px) { .mi { height: 108px; margin: 0 11px; } }
-  /* ── Luma — no border, small radius, hidden scrollbar ── */
   .lo {
     margin-top: 24px;
     border-radius: 8px;
@@ -141,6 +143,28 @@ const GS = `
     filter: blur(26px); opacity: .15; transition: opacity .45s ease; pointer-events: none;
   }
   .sc:hover .sf { opacity: 1; }
+  /* ── Social connect grid ── */
+  .soc-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 24px;
+  }
+  @media (max-width: 640px) {
+    .soc-grid { grid-template-columns: 1fr; gap: 12px; }
+  }
+  /* ── Social card hover lift ── */
+  .soc-card {
+    transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease;
+  }
+  .soc-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(255,122,195,0.55) !important;
+    box-shadow: 0 12px 40px rgba(128,97,255,0.22), 0 0 0 1px rgba(255,122,195,0.18);
+  }
+  /* ── Social button hover ── */
+  .soc-btn { transition: opacity .18s ease, transform .18s ease; }
+  .soc-btn:hover { opacity: 0.85; transform: scale(1.03); }
 `;
 /* ─── Page ───────────────────────────────────────────────────────────────── */
 export default function Page() {
@@ -155,6 +179,7 @@ export default function Page() {
         <KeynoteSpeakers />
         <LumaForm />
         <AboutNex />
+        <SocialConnect />
         <div style={{ height: 80 }} />
       </main>
     </div>
@@ -305,17 +330,11 @@ function LastHappenings() {
       <h2 className="st" style={sectionTitle}>Our Last Event</h2>
       {compact ? (
         <div style={{ marginTop: 24, display: "flex", flexDirection: "column", gap: mobile ? 7 : 10 }}>
-          {/* ── Video cell: 9:16 aspect ratio on mobile, fixed height on tablet ── */}
           <div
             style={{
               ...photoCell,
               ...(mobile
-                ? {
-                    alignSelf: "center",
-                    width: "60%",
-                    aspectRatio: "9 / 16",
-                    height: undefined,
-                  }
+                ? { alignSelf: "center", width: "60%", aspectRatio: "9 / 16", height: undefined }
                 : { height: 265 }),
             }}
           >
@@ -496,7 +515,6 @@ function KeynoteSpeakers() {
             >
               <img src={s.src} alt={s.name} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", objectPosition: "top", display: "block" }} />
               <div style={{ position: "absolute", bottom: -40, left: -40, width: "100%", height: 200, background: "radial-gradient(ellipse at 30% 85%, rgba(20,10,40,0.60) 0%, rgba(20,10,40,0.28) 42%, transparent 72%)", filter: "blur(20px)", pointerEvents: "none" }} />
-              {/* Eye icon — transparent background, always visible on mobile, fades in on hover on desktop */}
               <div
                 className="svh"
                 style={{
@@ -550,7 +568,6 @@ function LumaForm() {
       <p style={{ fontFamily: FONT, marginTop: 10, marginBottom: 0, fontSize: 13, fontWeight: 500, color: C.magenta, letterSpacing: "0.04em", textAlign: "center" }}>
         Free for creators — no ticket, no fee, ever
       </p>
-      {/* No border, small radius, scrollbar hidden */}
       <div className="lo">
         <div className="luma-scroll">
           <iframe
@@ -579,6 +596,200 @@ function AboutNex() {
         and events platform, we invest in educating and elevating creators because they are the
         future of the creator economy and we stand with each one of them.
       </p>
+    </section>
+  );
+}
+/* ─── Instagram SVG icon (reusable) ─────────────────────────────────────── */
+function IgIcon({ color, size = 22 }: { color: string; size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+      <circle cx="12" cy="12" r="4" />
+      <circle cx="17.5" cy="6.5" r="1" fill={color} stroke="none" />
+    </svg>
+  );
+}
+/* ─── Social Connect ─────────────────────────────────────────────────────── */
+function SocialConnect() {
+  const outerCard: React.CSSProperties = {
+    position: "relative",
+    overflow: "hidden",
+    borderRadius: 18,
+    border: "1px solid rgba(128,97,255,0.38)",
+    background: "rgba(128,97,255,0.06)",
+    padding: "28px 24px 24px",
+  };
+
+  const innerCard: React.CSSProperties = {
+    position: "relative",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    textAlign: "center",
+    gap: 10,
+    padding: "8px 12px",
+    flex: 1,
+  };
+
+  const btnBase: React.CSSProperties = {
+    display: "inline-flex",
+    alignItems: "center",
+    gap: 7,
+    marginTop: 6,
+    padding: "10px 22px",
+    borderRadius: 10, // reduced radius
+    fontFamily: FONT,
+    fontSize: 13,
+    fontWeight: 700,
+    letterSpacing: "0.04em",
+    textDecoration: "none",
+    cursor: "pointer",
+  };
+
+  return (
+    <section style={{ marginTop: 64 }}>
+      <Label text="Stay Connected" />
+
+      <h2 className="st" style={sectionTitle}>
+        Join the Community
+      </h2>
+
+      <p
+        style={{
+          fontFamily: FONT,
+          marginTop: 10,
+          marginBottom: 0,
+          fontSize: 13,
+          fontWeight: 400,
+          color: C.dimText,
+          textAlign: "center",
+          lineHeight: 1.7,
+        }}
+      >
+        Follow us for Event Updates and Enter our Exclusive Creator Circle.
+      </p>
+
+      <div style={{ ...outerCard, marginTop: 24 }}>
+        <div
+          style={{
+            display: "flex",
+            gap: 36,
+            flexWrap: "wrap",
+            justifyContent: "center",
+          }}
+        >
+          {/* LEFT BLOCK */}
+          <div style={innerCard}>
+            <IgIcon color={C.magenta} size={32} />
+
+            <div
+              style={{
+                fontFamily: FONT,
+                fontSize: 15,
+                fontWeight: 700,
+                color: C.white,
+                letterSpacing: "-0.02em",
+                marginTop: 2,
+              }}
+            >
+              Follow Us
+            </div>
+
+            <div
+              style={{
+                fontFamily: FONT,
+                fontSize: 12,
+                fontWeight: 400,
+                color: C.dimText,
+                lineHeight: 1.6,
+                maxWidth: 420,
+              }}
+            >
+              Stay up to date with event announcements, speaker reveals, and
+              behind-the-scenes content.
+            </div>
+
+            <a
+              href={IG_PROFILE_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="soc-btn"
+              style={{
+                ...btnBase,
+                background:
+                  "linear-gradient(135deg, #ff33bc 0%, #8061ff 100%)",
+                color: "#fff",
+                border: "none",
+              }}
+            >
+              <IgIcon color="#fff" size={14} />
+              Follow on Instagram
+            </a>
+          </div>
+
+          {/* RIGHT BLOCK */}
+          <div style={innerCard}>
+            <svg
+              width="32"
+              height="32"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke={C.violet}
+              strokeWidth="1.8"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+              <circle cx="9" cy="7" r="4" />
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+              <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+            </svg>
+
+            <div
+              style={{
+                fontFamily: FONT,
+                fontSize: 15,
+                fontWeight: 700,
+                color: C.white,
+                letterSpacing: "-0.02em",
+                marginTop: 2,
+              }}
+            >
+              Creator Community
+            </div>
+
+            <div
+              style={{
+                fontFamily: FONT,
+                fontSize: 12,
+                fontWeight: 400,
+                color: C.dimText,
+                lineHeight: 1.6,
+                maxWidth: 420,
+              }}
+            >
+              A private space for Baltic creators — network, share
+              opportunities, and grow together between events.
+            </div>
+
+            <a
+              href={IG_COMMUNITY_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="soc-btn"
+              style={{
+                ...btnBase,
+                background: "transparent",
+                color: C.violet,
+                border: "1.5px solid rgba(128,97,255,0.7)",
+              }}
+            >
+              <IgIcon color={C.violet} size={14} />
+              Join the Community
+            </a>
+          </div>
+        </div>
+      </div>
     </section>
   );
 }
