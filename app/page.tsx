@@ -564,7 +564,7 @@ function Sponsors() {
   return (
     <section style={{ marginTop: 64 }}>
       <Label text="Partners" />
-      <h2 className="st" style={sectionTitle}>Our Sponsors in Baltics</h2>
+      <h2 className="st" style={sectionTitle}>Our Partners in Baltics</h2>
       <div className="rb">
         <img src="/RedBull Image.webp" alt="Red Bull" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
       </div>
