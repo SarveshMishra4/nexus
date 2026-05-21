@@ -579,7 +579,6 @@ function Sponsors() {
 const MARQUEE_BRANDS = [
   { src: "/Artisan Street Bakery.webp", alt: "Artisan Street Bakery" },
   { src: "/Molberts.webp",             alt: "Molberts"              },
-  { src: "/Fizio Line.webp",           alt: "Fizio Line"            },
   { src: "/Gardu Muti.webp",           alt: "Gardu Muti"            },
   { src: "/Street Pizza.webp",         alt: "Street Pizza"          },
   { src: "/Street Burgers.webp",       alt: "Street Burgers"        },
