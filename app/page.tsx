@@ -583,6 +583,9 @@ const MARQUEE_BRANDS = [
   { src: "/Gardu Muti.webp",           alt: "Gardu Muti"            },
   { src: "/Street Pizza.webp",         alt: "Street Pizza"          },
   { src: "/Street Burgers.webp",       alt: "Street Burgers"        },
+  { src: "/Skriveru.webp",       alt: "Skriveru"        },
+  { src: "/Hedonya.webp",       alt: "Hedonya"        },
+
 ];
 function BrandMarquee() {
   const items = [...MARQUEE_BRANDS, ...MARQUEE_BRANDS];
