@@ -23,6 +23,15 @@ import type { Metadata } from "next";
 import { ProfileView } from "./profileView";
 
 // ─────────────────────────────────────────────
+// PARAMS TYPE
+// Next.js 15+ passes params as a Promise.
+// Defining it once here keeps both functions in sync.
+// ─────────────────────────────────────────────
+type PageProps = {
+  params: Promise<{ handle: string }>;
+};
+
+// ─────────────────────────────────────────────
 // PROFILE TYPE  (matches what your API returns)
 // ─────────────────────────────────────────────
 export interface CreatorProfile {
@@ -128,7 +137,7 @@ async function getProfile(handle: string): Promise<CreatorProfile | null> {
 // file exists as a server component
 // ─────────────────────────────────────────────
 export async function generateMetadata(
-  { params }: { params: Promise<{ handle: string }> }
+  { params }: PageProps
 ): Promise<Metadata> {
   const { handle } = await params;
   const profile = await getProfile(handle);
@@ -226,7 +235,7 @@ export async function generateMetadata(
 // PAGE  (renders the client component)
 // ─────────────────────────────────────────────
 export default async function ProfilePage(
-  { params }: { params: Promise<{ handle: string }> }
+  { params }: PageProps
 ) {
   const { handle } = await params;
   const profile = await getProfile(handle);
