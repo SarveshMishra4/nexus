@@ -20,7 +20,7 @@
  */
 
 import type { Metadata } from "next";
-import { ProfileView } from "./ProfileView";
+import { ProfileView } from "./profileView";
 
 // ─────────────────────────────────────────────
 // PROFILE TYPE  (matches what your API returns)
